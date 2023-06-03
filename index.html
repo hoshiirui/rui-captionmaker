@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Rangga Astawan | Cosplay Caption</title>
+        <link rel="stylesheet" href="styles/style.css">
+        <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+    </head>
+    <body>
+        <nav>
+          <input type="checkbox" id="nav-check">
+          <div class="nav-header">
+            <div class="nav-title">
+              <span>Cosplay</span> Caption.
+            </div>
+          </div>
+          <div class="nav-btn">
+            <label for="nav-check">
+              <span></span>
+              <span></span>
+              <span></span>
+            </label>
+          </div>
+          <div class="nav-links">
+            <a href = "#" class="nav-active">Home</a>
+            <!-- <a href="#">About Us</a>
+            <a href="#">Contact Us</a> -->
+          </div>
+        </nav>
+
+        
+
+
+
+        <section class="login-container">
+          <h2>Caption Maker for Kazedaa</h2>
+          <form>
+            <label for="quotes">Quotes/Upper Caption:</label>
+            <input type="text" id="quotes" name="quotes" placeholder="Enter quotes">
+
+            <label for="character">Character:</label>
+            <input type="text" id="character" name="character" placeholder="Enter character name">
+
+            <label for="origin">Origin:</label>
+            <input type="text" id="origin" name="origin" placeholder="Enter character origin">
+
+            <label for="hashtag">Cosplayer/In Frame:</label>
+            <input type="text" id="coser" name="coser" placeholder="Enter cosplayer">
+
+            <label for="hashtag">Hashtag:</label>
+            <input type="text" id="hashtag" name="hashtag" placeholder="Enter hashtag">
+
+            <button type="button" class="btn btn-primary" onclick="generatecaption()">Generate!</button>
+
+          </form>
+        </section>
+        <section class="login-container">
+          <form>
+            <div class="caption" id="c">
+              <label for="caption">Generated Caption:</label>
+              <textarea id="caption" name="caption"></textarea>
+              <button type="button" class="btn btn-primary" onclick="copyToClipboard()">Copy</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="container section-what">
+          <div class="section-what-img">
+            <img src = "img/what.jpg" width="100%" alt="calendar" >
+          </div>
+          <div class="section-what-text">
+            <h1>What is <span class="text-primary">Cosplay Caption?</span></h1>
+            <p>
+              A caption generator application automatically generates captions for images or videos by analyzing the content and applying natural language processing techniques. It helps users save time and effort in creating captions and can improve engagement on social media platforms.
+            </p>
+          </div>
+        </section>
+        
+
+        <footer class="container">
+          <div class="footer-bottom">
+            <p>
+              &copy; 2023 Rangga Astawan. All Rights Reserved.
+            </p>
+        </footer>
+
+    </body>
+
+
+    <script>
+      function getCharacter(str){
+        if(str.includes('&')){
+          str = str.replaceAll('&', 'and');
+        }
+        return str;
+      }
+
+      function getCoser(str){ 
+        let coserArray = [];
+        while(str.includes('@')){
+          start = str.indexOf('@'); // find the index of the '@' character
+          if((str.includes(' ', start) && str.includes(')', start)) && (str.indexOf(' ', start) < str.indexOf(')', start))){
+            end = str.indexOf(' ', start);
+          }else if((str.includes(' ', start) && str.includes(')', start)) && (str.indexOf(')', start) < str.indexOf(' ', start))){
+            end = str.indexOf(')', start);
+          }else if(str.includes(' ', start)){
+            end = str.indexOf(' ', start); // find the index of the ')' character, starting from the '@' index
+          }else if(str.includes(')', start)){
+            end = str.indexOf(')', start);
+          }else{
+            end = str.length;
+          }
+          result = str.substring(start, end); // extract the substring between the '@' and ')' characters
+          str = str.replaceAll(result, '');
+          coserArray.push(result);
+        }
+
+        if(coserArray.length <= 2){
+          result = coserArray.join(' and ');
+        }else{
+          result = coserArray.join(', ');
+          lastIndexOfComma = result.lastIndexOf(',');
+          result = result.slice(0, lastIndexOfComma) + ', and' + result.slice(lastIndexOfComma + 1);
+        }
+        return result;
+      }
+
+      function generatecaption(){
+        if(document.getElementById("quotes").value != ""){
+          quotes = document.getElementById("quotes").value;
+        }else{
+          quotes = "Check my Bio or DM me for the photos!";
+        }
+        if(document.getElementById("character").value != ""){
+          character = document.getElementById("character").value;
+        }else{
+          character = "????";
+        }
+        if(document.getElementById("origin").value != ""){
+          origin = document.getElementById("origin").value; 
+        }else{
+          origin = "????";
+        }
+        if(document.getElementById("coser").value != ""){
+          coser = document.getElementById("coser").value; 
+        }else{
+          coser = "????";
+        }
+        if(document.getElementById("hashtag").value != ""){
+          hashtag = document.getElementById("hashtag").value;
+        }else{
+          hashtag = "#cosplay #animecosplay"
+        }
+
+        document.getElementById("c").style.display = "block";
+        document.getElementById("caption").style.display = "block";
+        document.getElementById("caption").style.height = "20rem";
+        document.getElementById("caption").value = "'" + quotes + "'\n.\n.\n.\n.\nCharacter: " + getCharacter(character) + "\nOrigin: " + origin + "\nIn frame: " + getCoser(coser) + "\n.\n.\n.\n.\n" + hashtag;
+      }
+
+      function copyToClipboard() {
+        let textarea = document.getElementById('caption');
+        textarea.select();
+        document.execCommand('copy');
+        alert('Text copied to clipboard!');
+      }
+
+    </script>
+</html>
